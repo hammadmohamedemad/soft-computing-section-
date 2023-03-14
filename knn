@@ -1,0 +1,60 @@
+3/14/23, 7:46 PM gender project (KNN) - Colaboratory
+https://colab.research.google.com/drive/16RBjO87hslLGPvQVSn1uijRYKBzlD4ny#printMode=true 1/2
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import matplotlib.pyplot as plt
+import seaborn as sns
+dataset = pd.read_csv("/content/drive/MyDrive/gender_classification_v7.csv")
+data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5001 entries, 0 to 5000
+Data columns (total 8 columns):
+ # Column Non-Null Count Dtype 
+--- ------ -------------- ----- 
+ 0 long_hair 5001 non-null int64 
+ 1 forehead_width_cm 5001 non-null float64
+ 2 forehead_height_cm 5001 non-null float64
+ 3 nose_wide 5001 non-null int64 
+ 4 nose_long 5001 non-null int64 
+ 5 lips_thin 5001 non-null int64 
+ 6 distance_nose_to_lip_long 5001 non-null int64 
+ 7 gender 5001 non-null object 
+dtypes: float64(2), int64(5), object(1)
+memory usage: 312.7+ KB
+import os
+for dirname, _, filenames in os.walk('/content/drive/MyDrive/gender_classification_v7.csv'):
+for filename in filenames:
+print(os.path.join(dirname, filename))
+dataset['gender'] = dataset.gender.eq("Male").mul(1)
+#Now look at the gender column
+dataset.gender
+0 1
+1 0
+2 1
+3 1
+4 0
+ ..
+4996 0
+4997 0
+4998 0
+4999 0
+5000 1
+Name: gender, Length: 5001, dtype: int64
+X = dataset.iloc[:,0:8].values
+y = dataset.iloc[:,-1].values
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+▾ KNeighborsClassifier
+KNeighborsClassifier()
+from sklearn.neighbors import KNeighborsClassifier
+classifier1 = KNeighborsClassifier()
+classifier1.fit(X_train,y_train)
+classifier1TrainScore = round(classifier1.score(X_train,y_train)*100,2)
+classifier1TestScore = round(classifier1.score(X_test,y_test)*100,2)
+print("Model's training accuracy = " + str(classifier1TrainScore)+"%")
+print("Model's test accuracy = " + str(classifier1TestScore)+"%")
+Model's training accuracy = 99.87%
+Model's test accuracy = 99.6%
+3/14/23, 7:46 PM gender project (KNN) - Colaboratory
+https://colab.research.google.com/drive/16RBjO87hslLGPvQVSn1uijRYKBzlD4ny#printMode=true 2/2
+Colab paid products Cancel contracts here
