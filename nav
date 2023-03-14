@@ -1,0 +1,130 @@
+3/14/23, 7:46 PM gender project (naive bays) - Colaboratory
+https://colab.research.google.com/drive/1js_L4KYjkzpqgzalsKJRr6eV8neZ0x9G#printMode=true 1/4
+import·numpy·as·np·#·linear·algebra
+import·pandas·as·pd·#·data·processing,·CSV·file·I/O·(e.g.·pd.read_csv)
+import·matplotlib.pyplot·as·plt
+import·seaborn·as·sns
+import os
+for dirname, _, filenames in os.walk('/content/drive/MyDrive/gender_classification_v7.csv'):
+for filename in filenames:
+print(os.path.join('/content/drive/MyDrive/gender_classification_v7.csv', filename))
+data = pd.read_csv("/content/drive/MyDrive/gender_classification_v7.csv")
+long_hair forehead_width_cm forehead_height_cm nose_wide nose_long lips_thin
+0 1 11.8 6.1 1 0 1
+1 0 14.0 5.4 0 0 1
+2 0 11.8 6.3 1 1 1
+3 0 14.4 6.1 0 1 1
+4 1 13.5 5.9 0 0 0
+... ... ... ... ... ... ...
+4996 1 13.6 5.1 0 0 0
+4997 1 11.9 5.4 0 0 0
+4998 1 12.9 5.7 0 0 0
+4999 1 13.2 6.2 0 0 0
+5000 1 15.4 5.4 1 1 1
+5001 rows × 8 columns
+data
+data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5001 entries, 0 to 5000
+Data columns (total 8 columns):
+ # Column Non-Null Count Dtype 
+--- ------ -------------- ----- 
+ 0 long_hair 5001 non-null int64 
+ 1 forehead_width_cm 5001 non-null float64
+ 2 forehead_height_cm 5001 non-null float64
+ 3 nose_wide 5001 non-null int64 
+ 4 nose_long 5001 non-null int64 
+ 5 lips_thin 5001 non-null int64 
+ 6 distance_nose_to_lip_long 5001 non-null int64 
+ 7 gender 5001 non-null object 
+dtypes: float64(2), int64(5), object(1)
+memory usage: 312.7+ KB
+long_hair forehead_width_cm forehead_height_cm nose_wide nose_long lips_thin distance_nose_to_lip_long
+count 5001.000000 5001.000000 5001.000000 5001.000000 5001.000000 5001.000000 5001.000000
+mean 0.869626 13.181484 5.946311 0.493901 0.507898 0.493101 0.498900
+std 0.336748 1.107128 0.541268 0.500013 0.499988 0.500002 0.500049
+min 0.000000 11.400000 5.100000 0.000000 0.000000 0.000000 0.000000
+25% 1.000000 12.200000 5.500000 0.000000 0.000000 0.000000 0.000000
+50% 1.000000 13.100000 5.900000 0.000000 1.000000 0.000000 0.000000
+75% 1.000000 14.000000 6.400000 1.000000 1.000000 1.000000 1.000000
+max 1.000000 15.500000 7.100000 1.000000 1.000000 1.000000 1.000000
+data.describe()
+3/14/23, 7:46 PM gender project (naive bays) - Colaboratory
+https://colab.research.google.com/drive/1js_L4KYjkzpqgzalsKJRr6eV8neZ0x9G#printMode=true 2/4
+long_hair forehead_width_cm forehead_height_cm nose_wide nose_l
+long_hair 1.000000 -0.006530 -0.017233 0.001216 0.014
+forehead_width_cm -0.006530 1.000000 0.088596 0.251648 0.257
+forehead_height_cm -0.017233 0.088596 1.000000 0.211655 0.194
+nose_wide 0.001216 0.251648 0.211655 1.000000 0.565
+nose_long 0.014432 0.257368 0.194120 0.565192 1.000
+lips_thin 0.011287 0.258564 0.205441 0.557615 0.561
+distance_nose_to_lip_long -0.025794 0.251328 0.215292 0.569303 0.559
+data.corr()
+f, ax = plt.subplots(figsize = (12,10)) #confusion matrix
+sns.heatmap(data.corr(), annot = True, linewidths = 0.5, linecolor = "blue", fmt = ".4f", ax = ax)
+plt.show()
+from sklearn.metrics import f1_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import precision_score
+data_nbc = pd.read_csv("/content/drive/MyDrive/gender_classification_v7.csv")
+data_nbc
+3/14/23, 7:46 PM gender project (naive bays) - Colaboratory
+https://colab.research.google.com/drive/1js_L4KYjkzpqgzalsKJRr6eV8neZ0x9G#printMode=true 3/4
+long_hair forehead_width_cm forehead_height_cm nose_wide nose_long lips_thin dist
+0 1 11.8 6.1 1 0 1
+1 0 14.0 5.4 0 0 1
+2 0 11.8 6.3 1 1 1
+3 0 14.4 6.1 0 1 1
+4 1 13.5 5.9 0 0 0
+... ... ... ... ... ... ...
+4996 1 13.6 5.1 0 0 0
+4997 1 11.9 5.4 0 0 0
+4998 1 12.9 5.7 0 0 0
+4999 1 13.2 6.2 0 0 0
+5000 1 15.4 5.4 1 1 1
+5001 rows × 8 columns
+data_nbc.gender = [1 if i == "Male" else 0 for i in data_nbc.gender]
+long_hair forehead_width_cm forehead_height_cm nose_wide nose_long lips_thin dist
+0 1 11.8 6.1 1 0 1
+1 0 14.0 5.4 0 0 1
+2 0 11.8 6.3 1 1 1
+3 0 14.4 6.1 0 1 1
+4 1 13.5 5.9 0 0 0
+... ... ... ... ... ... ...
+4996 1 13.6 5.1 0 0 0
+4997 1 11.9 5.4 0 0 0
+4998 1 12.9 5.7 0 0 0
+4999 1 13.2 6.2 0 0 0
+5000 1 15.4 5.4 1 1 1
+5001 rows × 8 columns
+data_nbc
+x_data = data_nbc.drop(["gender"],axis = 1)
+# y_data
+y_data = data_nbc.gender.values
+long_hair forehead_width_cm forehead_height_cm nose_wide nose_long lips_thin dist
+0 1 11.8 6.1 1 0 1
+1 0 14.0 5.4 0 0 1
+2 0 11.8 6.3 1 1 1
+3 0 14.4 6.1 0 1 1
+4 1 13.5 5.9 0 0 0
+... ... ... ... ... ... ...
+4996 1 13.6 5.1 0 0 0
+4997 1 11.9 5.4 0 0 0
+4998 1 12.9 5.7 0 0 0
+4999 1 13.2 6.2 0 0 0
+5000 1 15.4 5.4 1 1 1
+5001 rows × 7 columns
+x_data
+3/14/23, 7:46 PM gender project (naive bays) - Colaboratory
+https://colab.research.google.com/drive/1js_L4KYjkzpqgzalsKJRr6eV8neZ0x9G#printMode=true 4/4
+y_data
+array([1, 0, 1, ..., 0, 0, 1])
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, test_size = 0.3, random_state=1)
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+gnb.fit(x_train, y_train)
+print("print Train for accuracy of NBC algo: ", gnb.score(x_train,y_train))
+print("print Test for accuracy of NBC algo: ", gnb.score(x_test,y_test))
+print Train for accuracy of NBC algo: 0.97
+print Test for accuracy of NBC algo: 0.9713524317121919
